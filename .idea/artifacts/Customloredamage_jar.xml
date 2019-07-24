@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="Customloredamage:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Customloredamage_jar</output-path>
+    <root id="root">
+      <element id="archive" name="Customloredamage.jar">
+        <element id="module-output" name="Customloredamage" />
+      </element>
+    </root>
+  </artifact>
+</component>

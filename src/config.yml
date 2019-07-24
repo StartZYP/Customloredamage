@@ -1,0 +1,6 @@
+state:
+  damage: '攻击'
+  denfense: '防御'
+  CritRate: '暴击率'
+  CritDouble: '暴击倍率'
+split: ":"
