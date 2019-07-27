@@ -2,4 +2,5 @@ name: Customloredamage
 main: com.github.qq4492004.Customloredamage.main
 version: 1.0
 commands:
-  Customloredamage:
+  LoreCreate:
+  LoreArms:

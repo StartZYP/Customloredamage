@@ -4,13 +4,19 @@ import com.github.qq4492004.Customloredamage.Entity.ConfigAttribute;
 import com.github.qq4492004.Customloredamage.Entity.PlayerAttribute;
 import com.github.qq4492004.Customloredamage.Listener.PlayerListener;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class main extends JavaPlugin implements Listener {
@@ -46,7 +52,75 @@ public class main extends JavaPlugin implements Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length==1){
+        if(label.equalsIgnoreCase("LoreArms")&&sender instanceof Player&&sender.hasPermission("lorecreate.use")&&args.length==2){
+            Player player = (Player) sender;
+            ItemStack itemInHand = player.getItemInHand();
+            if (itemInHand==null){
+                player.sendMessage("§e§l手持有问题");
+                return false;
+            }
+            if (itemInHand.getType()== Material.AIR){
+                player.sendMessage("§e§l手持有问题");
+                return false;
+            }
+            if (!itemInHand.hasItemMeta()){
+                player.sendMessage("§e§l手持有问题");
+                return false;
+            }
+            if (!itemInHand.getItemMeta().hasLore()){
+                player.sendMessage("§e§l手持有问题");
+                return false;
+            }
+            ItemMeta itemMeta = itemInHand.getItemMeta();
+            List<String> lore = itemMeta.getLore();
+            if (!lore.toString().contains(args[0])){
+                player.sendMessage("§e§l无关键字lore");
+                return false;
+            }
+            List<String> newlore = new ArrayList<>();
+            for (String temllore:lore){
+                if (temllore.contains(args[0])){
+                    String[] split = temllore.split(ConfigAttribute.split);
+                    double number = Double.parseDouble(split[1]);
+                    number+=Double.parseDouble(args[1]);
+                    String addlore = split[0] + number;
+                    newlore.add(addlore);
+                }else {
+                    newlore.add(temllore);
+                }
+            }
+            itemMeta.setLore(newlore);
+            itemInHand.setItemMeta(itemMeta);
+            player.setItemInHand(itemInHand);
+            player.sendMessage("添加成功");
+        }else if (label.equalsIgnoreCase("LoreCreate")&&sender instanceof Player&&sender.hasPermission("lorecreate.use")&&args.length==2){
+            Player player = (Player) sender;
+            ItemStack itemInHand = player.getItemInHand();
+            if (itemInHand==null){
+                player.sendMessage("§e§l手持有问题");
+                return false;
+            }
+            if (itemInHand.getType()== Material.AIR){
+                player.sendMessage("§e§l手持有问题");
+                return false;
+            }
+            ItemMeta itemMeta = itemInHand.getItemMeta();
+            if (itemMeta.hasLore()){
+                List<String> lore = itemMeta.getLore();
+                lore.add(args[0]+ConfigAttribute.split+args[1]);
+                itemMeta.setLore(lore);
+                itemInHand.setItemMeta(itemMeta);
+                player.setItemInHand(itemInHand);
+            }else {
+                List<String> lore = new ArrayList<>();
+                lore.add(args[0]+ConfigAttribute.split+args[1]);
+                itemMeta.setLore(lore);
+                itemInHand.setItemMeta(itemMeta);
+                player.setItemInHand(itemInHand);
+            }
+
+        }
+        if (args.length==1&&sender.isOp()){
             if (args[0].equalsIgnoreCase("reload")){
                 ConfigReload();
                 sender.sendMessage("重载ok");
